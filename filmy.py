@@ -7,15 +7,14 @@ class Movies:
         self.title = title
         self.year = year
         self.genre = genre
-        self._views = 0
+        self.views = 0
 
     def play(self):
-        self._views += 1
-        return f'Current views: {self._views}'
+        self.views += 1
+        return f'Current views: {self.views}'
     
-    @property
     def views(self):
-        return self._views
+        return self.views
 
     def __str__(self):
         return f'{self.title} ({self.year})'
@@ -35,16 +34,7 @@ class Series(Movies):
     def __repr__(self):
         return f"{self.title} S{self.season:02d}E{self.episode:02d}"
 
-    
-library = []
 
-movie1 = Movies(title='Pulp Fiction', year='1994', genre='action')
-movie2 = Movies(title='Interstellar', year='2015', genre='sci-fi')
-series1 = Series(title='Friends', year='1994', genre='comedy', season =5, episode=5)
-series2 = Series(title='For All Mankind', year='2023', genre='sci-fi', season=1, episode=3)
-series3 = Series(title='Friends', year='1994', genre='comedy', season =6, episode=2)
-
-library = [movie1, movie2, series1, series2, series3]
 
 def get_movies(random_library):
     movies = []
@@ -73,17 +63,12 @@ def search(title, random_lib):
 
 def generate_views(random_lib):
     selected_item = random.choice(random_lib)
-    selected_item._views += random.randint(1, 100)
+    selected_item.views += random.randint(1, 100)
     #print(f'{selected_item} Current views: {selected_item.views}')
 
 def more_views(random_lib):
-    for i in range(1,11):
+    for _ in range(10):
         generate_views(random_lib)
-
-'''def top_titles(how_many, random_lib, content_type):
-    lib_sorted = sorted(random_lib, key=lambda x: x._views, reverse=True)
-    top = lib_sorted[0:how_many]
-    print(top)'''
 
 def top_titles(how_many, random_lib, content_type):
     movies = []
@@ -93,8 +78,8 @@ def top_titles(how_many, random_lib, content_type):
             movies.append(i)
         elif type(i) is Series:
             series.append(i)
-    movies_sorted = sorted(movies, key=lambda x: x._views, reverse=True)
-    series_sorted = sorted(series, key=lambda x: x._views, reverse=True)
+    movies_sorted = sorted(movies, key=lambda x: x.views, reverse=True)
+    series_sorted = sorted(series, key=lambda x: x.views, reverse=True)
     top_movies = movies_sorted[0:how_many]
     top_series = series_sorted[0:how_many]
 
@@ -112,7 +97,7 @@ def add_season(random_lib, ep_title, ep_season, eps_number, ep_year, ep_genre):
         random_lib.append(episode)
 
 
-   
+
 if __name__ == '__main__':
     print('----- MOVIE LIBRARY -----')
 
@@ -133,3 +118,4 @@ if __name__ == '__main__':
     top_titles(3, library, 'movies')
     print(f'Top series from day {today}:')
     top_titles(3, library, 'series')
+    
