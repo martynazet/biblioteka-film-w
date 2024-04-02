@@ -12,9 +12,6 @@ class Movies:
     def play(self):
         self.views += 1
         return f'Current views: {self.views}'
-    
-    def views(self):
-        return self.views
 
     def __str__(self):
         return f'{self.title} ({self.year})'
@@ -35,32 +32,42 @@ class Series(Movies):
         return f"{self.title} S{self.season:02d}E{self.episode:02d}"
 
 
-
-def get_movies(random_library):
+def get_elements(how_many, random_lib, content_type):
     movies = []
-    for i in random_library:
-        if type(i) is Movies:
-            movies.append(i)
-    sorted_movies = sorted(movies, key=lambda movie: movie.title)
-    return sorted_movies
-    
-
-def get_series(random_library):
     series = []
-    for i in random_library:
-        if type(i) is Series:
-            series.append(i)
-    sorted_series = sorted(series, key=lambda serial: serial.title)
-    return sorted_series
+        
+    if content_type == 'movies':
+        for i in random_lib:
+            if type(i) is Movies:
+                movies.append(i)
+        movies_sorted = sorted(movies, key=lambda x: x.views, reverse=True)
+        top_movies = movies_sorted[0:how_many]
+        print(top_movies)
+    elif content_type == 'series':
+        for i in random_lib:
+            if type(i) is Series:
+                series.append(i)
+        series_sorted = sorted(series, key=lambda x: x.views, reverse=True)
+        top_series = series_sorted[0:how_many]
+        print(top_series)
+    else:
+        print("Wrong content")
 
+def get_movies(random_library, how_many):
+    return get_elements(how_many, random_library, "movies")
+
+def get_series(random_library, how_many):
+    return get_elements(how_many, random_library, "series")
         
 def search(title, random_lib):
-    searching_list = [x for x in random_lib if title in x.title]
-    if not searching_list:
-        print(f"There is no {title} in library")
+    for i in random_lib:
+        if title == i.title:
+            print(f"There is {title} in library.")
+            break
     else:
-        print(searching_list)
-
+        print(f"There is no {title} in library.")
+            
+            
 def generate_views(random_lib):
     selected_item = random.choice(random_lib)
     selected_item.views += random.randint(1, 100)
@@ -69,27 +76,6 @@ def generate_views(random_lib):
 def more_views(random_lib):
     for _ in range(10):
         generate_views(random_lib)
-
-def top_titles(how_many, random_lib, content_type):
-    movies = []
-    series = []
-    for i in random_lib:
-        if type(i) is Movies:
-            movies.append(i)
-        elif type(i) is Series:
-            series.append(i)
-    movies_sorted = sorted(movies, key=lambda x: x.views, reverse=True)
-    series_sorted = sorted(series, key=lambda x: x.views, reverse=True)
-    top_movies = movies_sorted[0:how_many]
-    top_series = series_sorted[0:how_many]
-
-    if content_type == 'movies':
-        print(top_movies)
-    elif content_type == 'series':
-        print(top_series)
-    else:
-        print("Wrong content")
-    
 
 def add_season(random_lib, ep_title, ep_season, eps_number, ep_year, ep_genre):
     for i in range(1, eps_number + 1):
@@ -115,7 +101,9 @@ if __name__ == '__main__':
     more_views(library)
     today = datetime.date.today()
     print(f'Top movies from day {today}:') 
-    top_titles(3, library, 'movies')
+    get_movies(library, 3)
     print(f'Top series from day {today}:')
-    top_titles(3, library, 'series')
+    get_series(library, 2)
+    search("Interstellar", library)
+    
     
