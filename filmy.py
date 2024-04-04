@@ -39,7 +39,7 @@ def top_titles(how_many, random_lib, content_type):
             content.append(i)
     if content:
         content_sorted = sorted(content, key=lambda x: x.views, reverse=True)
-        top_titles = content_sorted[0:how_many]
+        top_titles = content_sorted[:how_many]
         print(top_titles)
     else:
         print("Wrong content")
