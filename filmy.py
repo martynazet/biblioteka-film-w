@@ -35,7 +35,7 @@ class Series(Movies):
 def top_titles(how_many, random_lib, content_type):
     content = []
     for i in random_lib:
-        if isinstance(i, content_type):
+        if content_type == Movies or content_type == Series:
             content.append(i)
     if content:
         content_sorted = sorted(content, key=lambda x: x.views, reverse=True)
