@@ -11,8 +11,7 @@ class Movies:
 
     def play(self):
         self.views += 1
-        return f'Current views: {self.views}'
-
+        
     def __str__(self):
         return f'{self.title} ({self.year})'
     
@@ -32,32 +31,25 @@ class Series(Movies):
         return f"{self.title} S{self.season:02d}E{self.episode:02d}"
 
 
-def get_elements(how_many, random_lib, content_type):
-    movies = []
-    series = []
-        
-    if content_type == 'movies':
-        for i in random_lib:
-            if type(i) is Movies:
-                movies.append(i)
-        movies_sorted = sorted(movies, key=lambda x: x.views, reverse=True)
-        top_movies = movies_sorted[0:how_many]
-        print(top_movies)
-    elif content_type == 'series':
-        for i in random_lib:
-            if type(i) is Series:
-                series.append(i)
-        series_sorted = sorted(series, key=lambda x: x.views, reverse=True)
-        top_series = series_sorted[0:how_many]
-        print(top_series)
+
+def top_titles(how_many, random_lib, content_type):
+    content = []
+    for i in random_lib:
+        if isinstance(i, content_type):
+            content.append(i)
+    if content:
+        content_sorted = sorted(content, key=lambda x: x.views, reverse=True)
+        top_titles = content_sorted[0:how_many]
+        print(top_titles)
     else:
         print("Wrong content")
 
+      
 def get_movies(random_library, how_many):
-    return get_elements(how_many, random_library, "movies")
+    return top_titles(how_many, random_library, Movies)
 
 def get_series(random_library, how_many):
-    return get_elements(how_many, random_library, "series")
+    return top_titles(how_many, random_library, Series)
         
 def search(title, random_lib):
     for i in random_lib:
